@@ -1,45 +1,58 @@
 import { View, Button } from '@tarojs/components'
-import { useCallback, useState } from 'react'
-import {foodList} from '../../constants/food'
+import { useCallback, useEffect, useState } from 'react'
+import {commonDescription, foodList} from '../../constants/food'
 import './index.less'
 
-const getRandom = () => {
-  const foodLength = foodList.length
+const getRandom = (list) => {
+  const foodLength = list.length
   const index = Math.floor(Math.random() * foodLength)
-  return foodList[index]
+  return list[index]
 }
+const getFoodRandom = () => getRandom(foodList)
+const getDescriptionRandom = () => getRandom(commonDescription)
 
 const FC = () => {
-  const [food, setFood] = useState(getRandom())
+  const [food, setFood] = useState(getFoodRandom())
   const [loading, setLoading] = useState(false)
+  const [description, setDescription] = useState(getDescriptionRandom())
+  useEffect(() => {
+    setDescription(getDescriptionRandom())
+  }, [food])
 
   const reRandom = () => {
-    const newRandom = getRandom()
+    const newRandom = getFoodRandom()
     setFood(newRandom)
   }
 
   let clock
-  const every3Sec = () => {
+  const startInterval = () => {
     clock = setInterval(() => {
-      console.log('~~~~~~~~~~~~~~~~~~~~~~ interval');
       reRandom()
-    }, 100)
+    }, 66)
   }
 
   const handleClick = useCallback(() => {
+    if (clock) return
     setLoading(true)
-    every3Sec()
-    setTimeout(() => {
-      console.log('~~~~~~~~~~~~~~~~~~~~~~ stop');
-      clearInterval(clock)
-      setLoading(false)
-    }, 2000)
+    startInterval()
+  }, [])
+
+  const handleStop = useCallback(() => {
+    clearInterval(clock)
+    clock = undefined
+    setLoading(false)
   }, [])
 
   return <View className='container'>
-    <View className={`content ${loading ? 'loading' : null}`}>{food}</View>
+    <View className='body'>
+      <View className={`content ${loading ? 'loading' : null}`}>{food.name || '🤯 没啥好吃了'}</View>
+      {!loading ? <View className='description'>{food.description || description}</View> : null}
+    </View>
     <View className='footer'>
-      <Button type='primary' onClick={handleClick}>再摇一次</Button>
+      <View className='btn-group'>
+        <Button className='button left' onClick={handleClick}>🤔 换一个</Button>
+        <Button className='button right' onClick={handleStop}>🤟 就它了</Button>
+      </View>
     </View>
   </View>
 }
