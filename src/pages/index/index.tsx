@@ -50,8 +50,13 @@ const FC = () => {
     </View>
     <View className='footer'>
       <View className='btn-group'>
-        <Button className='button left' onClick={handleClick}>🤔 换一个</Button>
-        <Button className='button right' onClick={handleStop}>🤟 就它了</Button>
+        <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleClick : handleStop}>
+          {!loading ? '🤔 换一个' : '🤟 就它了'}
+        </Button>
+        {/* {!loading
+          ? <Button className='button' onClick={handleClick}>🤔 换一个</Button>
+          : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
+        } */}
       </View>
     </View>
   </View>

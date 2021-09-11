@@ -38,10 +38,21 @@
       justify-content: space-between;
 
       .button {
-        background-color: rgba(200, 200, 200, .2);
-        color: rgba(255, 255, 255, .8);
+        transition: all .2s;
+        background-color: rgba(200, 200, 200, .1);
+        color: rgba(255, 255, 255, 1);
         border: 1px solid rgba(255,255,255, 1);
-        width: 42%;
+        width: 56%;
+
+        &:active {
+          background-color: rgba(255,255,255,.0);
+          color: #fff;
+        }
+
+        &.stop {
+          background-color: #E93B3D;
+          border: none;
+        }
       }
     }
   }
