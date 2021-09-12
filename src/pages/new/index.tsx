@@ -33,7 +33,11 @@ const FC: React.FC = () => {
   }
   const handleActive = (e, index) => {
     e.stopPropagation()
-    setActiveIndex(index)
+    if (index === activeIndex) {
+      handleDelete(index)
+    } else {
+      setActiveIndex(index)
+    }
   }
 
   return <View className="container" onClick={handleClickOutSide}>
@@ -48,7 +52,7 @@ const FC: React.FC = () => {
               onClick={(e) => handleActive(e, index)}
             >
               <View className="content">{item.name}</View>
-              <View className="delete show" onClick={() => handleDelete(index)}>X</View>
+              <View className="delete">X</View>
             </View>
           })}
         </View>

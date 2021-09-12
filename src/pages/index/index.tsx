@@ -1,4 +1,4 @@
-import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro'
+import Taro, { useDidShow, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
 import {commonDescription} from '../../constants/food'
@@ -7,7 +7,6 @@ import { useRandomList } from '../../model/list'
 import './index.less'
 
 const getRandom = (list) => {
-  console.log('🚧 || list', list);
   const foodLength = list.length
   const index = Math.floor(Math.random() * foodLength)
   return list[index]
@@ -28,13 +27,11 @@ const FC = () => {
     }
   })
 
-  const {randomList} = useRandomList()
-  const getFoodRandom = useCallback(() => {
-    console.log('🚧 || randomList', randomList);
-    const t = getRandom(randomList)
-    console.log('🚧 || t', t);
-    return t
-  }, [randomList])
+  const {randomList, refreshRandomList} = useRandomList()
+  const getFoodRandom = useCallback(() => getRandom(randomList), [randomList])
+  useDidShow(() => {
+    refreshRandomList()
+  })
 
   const [food, setFood] = useState(getFoodRandom())
   const [loading, setLoading] = useState(false)
@@ -52,24 +49,25 @@ const FC = () => {
     setFood(newRandom)
   }, [setFood, getFoodRandom])
 
-  let clock
-  const startInterval = () => {
-    clock = setInterval(() => {
+  const [clock, setClock] = useState<any>()
+  const startInterval = useCallback(() => {
+    setClock(setInterval(() => {
       reRandom()
-    }, 66)
-  }
+    }, 66))
+    return () => clearInterval(clock)
+  }, [clock, reRandom])
 
   const handleClick = useCallback(() => {
     if (clock) return
     setLoading(true)
     startInterval()
-  }, [])
+  }, [clock, startInterval])
 
   const handleStop = useCallback(() => {
     clearInterval(clock)
-    clock = undefined
+    setClock(undefined)
     setLoading(false)
-  }, [])
+  }, [setClock, clock])
 
   const handleDIY = () => {
     Taro.navigateTo({
@@ -77,7 +75,6 @@ const FC = () => {
     })
   }
 
-  console.log('🚧 || food', food);
   return <View className='container'>
     <View className='body'>
       <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>

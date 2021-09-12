@@ -1,5 +1,5 @@
 import { getStorageSync, setStorageSync } from "@tarojs/taro";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RANDOM_LIST } from "../constants"
 import { foodList } from "../constants/food"
 
@@ -33,19 +33,23 @@ export function resetList() {
 }
 
 export const useRandomList = () => {
-  const [randomList, setRandomList] = useState<{name: string, description: string}[]>([])
-  useEffect(() => {
     const initList = getList()
-    setRandomList(initList)
-  }, [])
+  const [randomList, setRandomList] = useState<{name: string, description: string}[]>(initList)
 
   const updateRandomList = (list) => {
     setList(list)
     setRandomList(list)
   }
 
+  const refreshRandomList = () => {
+    const list = getList()
+    setList(list)
+    setRandomList(list)
+  }
+
   return {
     randomList,
-    setRandomList: updateRandomList
+    setRandomList: updateRandomList,
+    refreshRandomList
   }
 }
