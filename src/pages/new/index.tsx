@@ -61,7 +61,7 @@ const FC: React.FC = () => {
         className='input'
         type='text'
         placeholder='请输入'
-        focus
+        // focus
         maxlength={16}
         placeholderStyle='color: rgba(255,255,255,.7);'
       />
