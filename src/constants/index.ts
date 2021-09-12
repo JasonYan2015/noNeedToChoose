@@ -1,0 +1,1 @@
+export const RANDOM_LIST = 'RANDOM_LIST'

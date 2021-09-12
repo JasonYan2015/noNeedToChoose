@@ -1,6 +1,9 @@
+import Taro from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
-import {commonDescription, foodList} from '../../constants/food'
+import {commonDescription} from '../../constants/food'
+import { getList } from '../../model/list'
+
 import './index.less'
 
 const getRandom = (list) => {
@@ -8,6 +11,7 @@ const getRandom = (list) => {
   const index = Math.floor(Math.random() * foodLength)
   return list[index]
 }
+const foodList = getList()
 const getFoodRandom = () => getRandom(foodList)
 const getDescriptionRandom = () => getRandom(commonDescription)
 
@@ -43,6 +47,12 @@ const FC = () => {
     setLoading(false)
   }, [])
 
+  const handleDIY = () => {
+    Taro.navigateTo({
+      url: '/pages/new/index'
+    })
+  }
+
   return <View className='container'>
     <View className='body'>
       <View className={`content ${loading ? 'loading' : null}`}>{food.name || '🤯 没啥好吃了'}</View>
@@ -57,6 +67,7 @@ const FC = () => {
           ? <Button className='button' onClick={handleClick}>🤔 换一个</Button>
           : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
         } */}
+        <View className='link' onClick={handleDIY}>定制我的随机池</View>
       </View>
     </View>
   </View>

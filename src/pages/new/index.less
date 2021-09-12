@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: #FFC701;
+  color: #fff;
+  overflow: auto;
+
+  .body {
+    // padding-top: 180px;
+
+    .title {
+      padding-left: 24px;
+      margin-bottom: 12px;
+      font-size: 56px;
+      // font-weight: bold;
+    }
+    .list {
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+
+        .tag {
+          display: flex;
+          border: 1px solid #fff;
+          border-radius: 50px;
+          margin-left: 16px;
+          margin-top: 8px;
+          transition: all .3s;
+
+          .content {
+            padding: 8px 24px;
+          }
+
+          .delete {
+            display: none;
+            padding: 8px;
+            margin-right: 16px;
+          }
+
+          &.active {
+            background-color: #E93B3D;
+            .delete {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .footer-fixed {
+    justify-self: flex-end;
+    padding-bottom: constant(safe-area-inset-bottom); //兼容IOS < 11.2
+    padding-bottom: env(safe-area-inset-bottom);//兼容IOS > 11.2
+
+    box-shadow: 0 0 20px 4px rgba(169, 169, 169, .3);
+    display: flex;
+    // background-color: #fff;
+    color: #fff;
+
+    .input {
+      width: 100%;
+      // border-bottom: 1px solid #E93B3D;
+      font-size: 36px;
+      padding: 24px 16px 16px;
+    }
+    .btn {
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      background-color: #E93B3D;
+      width: 160px;
+      height: 94px;
+    }
+  }
+}
