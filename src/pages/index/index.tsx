@@ -75,6 +75,17 @@ const FC = () => {
     })
   }
 
+  const goOrder = () => {
+    Taro.navigateToMiniProgram({
+      appId: 'wxde8ac0a21135c07d',
+      path: '/index/pages/h5/h5?lch=cps:waimai:5:0997d7a7f07d93647eaa3d8d92b3a94f:chidianshahaone:33:139764&weburl=https%3A%2F%2Fdpurl.cn%2FUcGpvGQz&f_userId=1&f_token=1',
+      success: function(res) {
+        // 打开成功
+        console.log('🚧 || res', res);
+      }
+    })
+  }
+
   return <View className='container'>
     <View className='body'>
       <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>
@@ -82,6 +93,7 @@ const FC = () => {
     </View>
     <View className='footer'>
       <View className='btn-group'>
+        {!loading ? <Button className='button primary' onClick={goOrder}>🍻 优惠点餐</Button> : null}
         <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleClick : handleStop}>
           {!loading ? '🤔 换一个' : '🤟 就它了'}
         </Button>
@@ -89,7 +101,7 @@ const FC = () => {
           ? <Button className='button' onClick={handleClick}>🤔 换一个</Button>
           : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
         } */}
-        <View className='link' onClick={handleDIY}>定制我的随机池</View>
+        <View className='link fix-foot' onClick={handleDIY}>定制我的随机池</View>
       </View>
     </View>
   </View>
