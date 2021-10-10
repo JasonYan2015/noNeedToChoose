@@ -1,3 +1,7 @@
+import {
+  showModal as TaroShowModal,
+  showToast as TaroShowToast,
+ } from '@tarojs/taro'
 import { Button, Input, View } from '@tarojs/components'
 import React, { useEffect, useState } from 'react'
 import { useRandomList } from '../../model/list'
@@ -6,7 +10,7 @@ import './index.less'
 const FC: React.FC = () => {
   const [text, setText] = useState('')
   const [activeIndex, setActiveIndex] = useState<boolean | number>(false)
-  const {randomList, setRandomList} = useRandomList()
+  const {randomList, setRandomList, resetRandomList} = useRandomList()
   const handleSubmit = () => {
     if (!text.trim()) return
     setRandomList([...randomList, {
@@ -40,9 +44,27 @@ const FC: React.FC = () => {
     }
   }
 
+  const handleReset = () => {
+    TaroShowModal({
+      title: '提示',
+      content: '确认重置吗？这将会清空当前随机池，且无法恢复',
+      success: function (res) {
+        if (res.confirm) {
+          resetRandomList()
+          TaroShowToast({title: '重置成功', icon: 'none'})
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  }
+
   return <View className="container" onClick={handleClickOutSide}>
     <View className="body">
-      <View className="title">现在有哪些呢</View>
+      <View className="title">
+        现在有哪些呢
+        <View className="reset" onClick={handleReset}>重置</View>
+      </View>
       <View className="list">
         <View className="tag-container">
           {randomList.map((item, index) => {

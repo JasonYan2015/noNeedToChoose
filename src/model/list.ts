@@ -47,9 +47,15 @@ export const useRandomList = () => {
     setRandomList(list)
   }
 
+  const resetRandomList = () => {
+    resetList()
+    refreshRandomList()
+  }
+
   return {
     randomList,
     setRandomList: updateRandomList,
-    refreshRandomList
+    refreshRandomList,
+    resetRandomList
   }
 }
