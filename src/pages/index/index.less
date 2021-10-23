@@ -1,10 +1,34 @@
 .container {
+  position: relative;
   display: flex;
   height: 100%;
   justify-content: center;
   flex-direction: column;
   background-color: #FFC701;
   color: #fff;
+
+  .background {
+    @space: -20%;
+    .left,
+    .right {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      .img {
+        width: 360px;
+        height: 180px;
+        opacity: 0.75;
+      }
+    }
+    .left {
+      left: @space;
+    }
+    .right {
+      right: @space;
+    }
+  }
 
   .body {
     box-sizing: border-box;
@@ -19,13 +43,15 @@
 
     .content {
       font-size: 56px;
+      text-shadow: 0 0 10px #666;
 
       &.loading {
         color: rgba(255, 255, 255, .5);
       }
     }
     .description {
-      color: rgba(255, 255, 255, .8);
+      color: #fff;
+      text-shadow: 0 0 10px #aaa;
     }
   }
 

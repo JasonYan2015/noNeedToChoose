@@ -1,10 +1,30 @@
 import Taro, { useDidShow, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Button, Image } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
 import {commonDescription} from '../../constants/food'
 import { useRandomList } from '../../model/list'
 
+import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '../../../src/assets/foodIcon'
+
 import './index.less'
+
+const splitArrayIntoTwo: <T>(arr: T[], size: number) => T[] = (arr, size) => {
+  const res = []
+  const remaining = arr.slice()
+
+  const getRandomIndex = (scope) => Math.floor(Math.random() * scope)
+  while (res.length < size) {
+    const randomIndex = getRandomIndex(remaining.length)
+    const movingItem = remaining[randomIndex]
+    remaining.splice(randomIndex, 1)
+    res.push(movingItem)
+  }
+
+  return [res, remaining]
+}
+
+const BG_ICON_LIST = [ bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 ]
+const BG_ICON_LIST_SIDE_LENGTH = Math.floor(BG_ICON_LIST.length / 2)
 
 const getRandom = (list) => {
   const foodLength = list.length
@@ -86,7 +106,24 @@ const FC = () => {
     })
   }
 
+
+  const [bgLeftList, setBgLeftList] = useState([] as any[])
+  const [bgRightList, setBgRightList] = useState([] as any[])
+  useEffect(() => {
+    const [left, right] = splitArrayIntoTwo(BG_ICON_LIST, BG_ICON_LIST_SIDE_LENGTH)
+    setBgLeftList(left)
+    setBgRightList(right)
+  }, [])
+
   return <View className='container'>
+    <View className="background">
+      <View className="left">
+        {bgLeftList.map(item => <Image className="img" key={item} mode="aspectFit" src={item} />)}
+      </View>
+      <View className="right">
+      {bgRightList.map(item => <Image className="img" key={item} mode="aspectFit" src={item} />)}
+      </View>
+    </View>
     <View className='body'>
       <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>
       {!loading ? <View className='description'>{food?.description || description}</View> : null}
