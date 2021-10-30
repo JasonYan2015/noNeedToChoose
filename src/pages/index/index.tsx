@@ -83,10 +83,17 @@ const FC = () => {
   /**
    * 摇
    */
-  const reRandom = useCallback(() => {
+  const reRandom = useCallback((tk, setTk) => {
     const newRandom = getFoodRandom()
     setFood(newRandom)
-    setBgRandomIndex(getRandomIndex(BG_ICON_LIST.length))
+
+    const steps = tk / 5
+    if (steps > BG_ICON_LIST.length) {
+      setTk(0)
+    }
+    const newBgIndex = Math.floor(steps)
+    console.log('🚧 || newBgIndex', newBgIndex);
+    setBgRandomIndex(newBgIndex)
   }, [setFood, getFoodRandom])
 
   /**
@@ -95,8 +102,12 @@ const FC = () => {
    */
   const [clock, setClock] = useState<any>()
   const startInterval = useCallback(() => {
+    let tk = 0
+    const setTk = (t) => tk = t
     setClock(setInterval(() => {
-      reRandom()
+      tk++;
+      console.log('🚧 || tk', tk);
+      reRandom(tk, setTk)
     }, 66))
     return () => clearInterval(clock)
   }, [clock, reRandom])
@@ -162,10 +173,20 @@ const FC = () => {
     {/* 背景 */}
     <View className={`background ${needWelcome || (bgRandomIndex === -1) ? 'show-all' : ''}`}>
       <View className="left">
-        {bgLeftList.map((item, lIndex) => <Image className={`img ${lIndex === ~~bgRandomIndex ? 'show' : ''}`} key={item} mode="aspectFit" src={item} />)}
+        {bgLeftList.map((item, lIndex) => <Image
+          className={`img ${lIndex === ~~bgRandomIndex ? 'show' : ''}`}
+          key={item}
+          mode="aspectFit"
+          src={item}
+        />)}
       </View>
       <View className="right">
-        {bgRightList.map((item, rIndex) => <Image className={`img ${~~bgRandomIndex - BG_ICON_LIST_SIDE_LENGTH === rIndex ? 'show' : ''}`} key={item} mode="aspectFit" src={item} />)}
+        {bgRightList.map((item, rIndex) => <Image
+          className={`img ${~~bgRandomIndex - BG_ICON_LIST_SIDE_LENGTH === rIndex ? 'show' : ''}`}
+          key={item}
+          mode="aspectFit"
+          src={item}
+        />)}
       </View>
     </View>
 
