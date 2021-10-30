@@ -1,10 +1,12 @@
+@import "../../app";
+
 .container {
   display: flex;
   height: 100%;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #FFC701;
-  color: #fff;
+  background-color: @fifth;
+  color: @primary;
   overflow: auto;
 
   .body {
@@ -22,7 +24,7 @@
       .reset {
         font-size: 36px;
         text-decoration: underline;
-        color: rgba(255,255,255,0.75);
+        color: @primary;
       }
     }
     .list {
@@ -32,7 +34,7 @@
 
         .tag {
           display: flex;
-          border: 1px solid #fff;
+          border: 1px solid @primary;
           border-radius: 50px;
           margin-left: 16px;
           margin-top: 8px;
@@ -49,7 +51,7 @@
           }
 
           &.active {
-            background-color: #E93B3D;
+            background-color: @primary;
             .delete {
               display: inline-block;
             }
@@ -81,7 +83,7 @@
       justify-content: center;
       align-items: center;
       color: #fff;
-      background-color: #E93B3D;
+      background-color: @primary;
       width: 160px;
       height: 94px;
     }

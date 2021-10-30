@@ -87,9 +87,10 @@ const FC: React.FC = () => {
         className='input'
         type='text'
         placeholder='请输入'
+        // TODO: 是JS变量，没法用 theme.less
+        placeholderStyle="color: #b97843"
         // focus
         maxlength={16}
-        placeholderStyle='color: rgba(255,255,255,.7);'
       />
       <Button className='btn' onClick={handleSubmit}>增加</Button>
     </View>
