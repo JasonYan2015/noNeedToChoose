@@ -66,11 +66,12 @@ const FC = () => {
   })
 
   /**
-   * 摇一个食物、描述
+   * 摇一个食物、描述、出现的食物底图
    */
   const [food, setFood] = useState(getFoodRandom())
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState(getDescriptionRandom())
+  const [bgRandomIndex, setBgRandomIndex] = useState(-1)
   useEffect(() => {
     const newFood = getFoodRandom()
     setFood(newFood)
@@ -85,6 +86,7 @@ const FC = () => {
   const reRandom = useCallback(() => {
     const newRandom = getFoodRandom()
     setFood(newRandom)
+    setBgRandomIndex(getRandomIndex(BG_ICON_LIST.length))
   }, [setFood, getFoodRandom])
 
   /**
@@ -118,6 +120,7 @@ const FC = () => {
     clearInterval(clock)
     setClock(undefined)
     setLoading(false)
+    setBgRandomIndex(-1)
   }, [setClock, clock])
 
   /**
@@ -157,12 +160,12 @@ const FC = () => {
   return <View className='container'>
 
     {/* 背景 */}
-    <View className="background">
+    <View className={`background ${needWelcome || (bgRandomIndex === -1) ? 'show-all' : ''}`}>
       <View className="left">
-        {bgLeftList.map(item => <Image className="img" key={item} mode="aspectFit" src={item} />)}
+        {bgLeftList.map((item, lIndex) => <Image className={`img ${lIndex === ~~bgRandomIndex ? 'show' : ''}`} key={item} mode="aspectFit" src={item} />)}
       </View>
       <View className="right">
-      {bgRightList.map(item => <Image className="img" key={item} mode="aspectFit" src={item} />)}
+        {bgRightList.map((item, rIndex) => <Image className={`img ${~~bgRandomIndex - BG_ICON_LIST_SIDE_LENGTH === rIndex ? 'show' : ''}`} key={item} mode="aspectFit" src={item} />)}
       </View>
     </View>
 

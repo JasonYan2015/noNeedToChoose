@@ -10,7 +10,9 @@
   color: @primary;
 
   .background {
-    @space: -24%;
+    @space: -50%;
+    @space-hide: -80%;
+    @space-active: -30%;
     .left,
     .right {
       display: flex;
@@ -18,17 +20,40 @@
       position: absolute;
       top: 0;
       height: 100%;
-      .img {
-        width: 360px;
-        height: 180px;
-        opacity: 0.3;
-      }
+    }
+    .img {
+      position: relative;
+      width: 360px;
+      height: 180px;
+      opacity: 0.3;
+      transition: left .3s, right .3s;
     }
     .left {
-      left: @space;
+      left: 0;
+      .img {
+        left: @space-hide;
+        &.show {
+          left: @space-active;
+        }
+      }
     }
     .right {
-      right: @space;
+      right: 0;
+      .img {
+        right: @space-hide;
+        &.show {
+          right: @space-active;
+        }
+      }
+    }
+
+    &.show-all {
+      .left .img {
+        left: @space;
+      }
+      .right .img {
+        right: @space;
+      }
     }
   }
 
