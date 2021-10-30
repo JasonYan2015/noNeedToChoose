@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-commonjs
+const path = require('path')
+
 const config = {
   projectName: 'noNeed2Choose',
   date: '2021-9-11',
@@ -59,6 +62,13 @@ const config = {
         }
       }
     }
+  },
+  alias: {
+    '@/constants': path.resolve(__dirname, '..', 'src/constants'),
+    '@/model': path.resolve(__dirname, '..', 'src/model'),
+    '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@/pages': path.resolve(__dirname, '..', 'src/pages'),
+    '@/assets': path.resolve(__dirname, '..', 'src/assets'),
   }
 }
 
