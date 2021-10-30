@@ -1,7 +1,7 @@
 import { getStorageSync, setStorageSync } from "@tarojs/taro";
 import { useState } from "react";
 import { RANDOM_LIST } from "../constants"
-import { foodList } from "../constants/food"
+import { FOOD_LIST } from "../constants/food"
 
 let _list: {
   name: string;
@@ -17,7 +17,7 @@ export function getList() {
 
   if (!_list || !Array.isArray(_list)) {
     resetList()
-    return foodList
+    return FOOD_LIST
   }
   return _list
 }
@@ -28,8 +28,8 @@ export function setList(list) {
 }
 
 export function resetList() {
-  setStorageSync(RANDOM_LIST, foodList)
-  _list = foodList
+  setStorageSync(RANDOM_LIST, FOOD_LIST)
+  _list = FOOD_LIST
 }
 
 export const useRandomList = () => {

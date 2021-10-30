@@ -1,18 +1,19 @@
 import Taro, { useDidShow } from '@tarojs/taro'
-import { View, Button, Image } from '@tarojs/components'
+import { View, Button, Image, Text } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
-import {commonDescription} from '@/constants/food'
+import dayjs from 'dayjs'
+import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
 import { useShare } from '@/utils/share'
 
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '@/assets/foodIcon'
 import './index.less'
 
+const getRandomIndex = (length) => Math.floor(Math.random() * length)
 const splitArrayIntoTwo: <T>(arr: T[], size: number) => T[][] = (arr, size) => {
   const res = []
   const remaining = arr.slice()
 
-  const getRandomIndex = (scope) => Math.floor(Math.random() * scope)
   while (res.length < size) {
     const randomIndex = getRandomIndex(remaining.length)
     const movingItem = remaining[randomIndex]
@@ -23,6 +24,14 @@ const splitArrayIntoTwo: <T>(arr: T[], size: number) => T[][] = (arr, size) => {
   return [res, remaining]
 }
 
+const getGreetings = () => {
+  const currentHour = dayjs().hour()
+  if (currentHour < 11) return '上午好'
+  else if (currentHour > 18) return '晚上好'
+  else if (currentHour > 14) return '下午好'
+  else return '中午好'
+}
+
 const BG_ICON_LIST = [ bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 ]
 const BG_ICON_LIST_SIDE_LENGTH = Math.floor(BG_ICON_LIST.length / 2)
 
@@ -31,13 +40,13 @@ const getRandom = (list) => {
   const index = Math.floor(Math.random() * foodLength)
   return list[index]
 }
-const getDescriptionRandom = () => getRandom(commonDescription)
+const getDescriptionRandom = () => getRandom(COMMON_DESCRIPTION)
 
 const FC = () => {
   /**
    * 刚打开的指引
    */
-   const [needWelcome, setNeedWelcome] = useState(true)
+  const [needWelcome, setNeedWelcome] = useState(true)
 
   /**
    * 分享
@@ -95,6 +104,8 @@ const FC = () => {
    * 点击事件
    */
   const handleClick = useCallback(() => {
+    // 不用欢迎了
+    if (needWelcome) setNeedWelcome(false)
     if (clock) return
     setLoading(true)
     startInterval()
@@ -143,7 +154,6 @@ const FC = () => {
     setBgRightList(right)
   }, [])
 
-
   return <View className='container'>
 
     {/* 背景 */}
@@ -158,10 +168,22 @@ const FC = () => {
 
     {/* 引导区 */}
     {needWelcome ? <View className="welcome-container">
-
+      <View className="body">
+        <View className="greeting">
+          <View>Hi, {getGreetings()}</View>
+          <br />
+          {SENTENCE_LIST[getRandomIndex(SENTENCE_LIST.length)]}
+        </View>
+        <View className="operation">那么，<Text className="bold">今天吃什么好呢？</Text></View>
+      </View>
+      <View className='footer'>
+        <View className='btn-group'>
+          <Button className={`button stop`} onClick={!loading ? handleClick : handleStop}> 👨‍🍳 推荐一个吧 </Button>
+        </View>
+      </View>
     </View> : null}
 
-    {!needWelcome ? <View className="result-container">
+    {!needWelcome ? <>
       {/* 结果和描述 */}
       <View className='body'>
         <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>
@@ -182,7 +204,7 @@ const FC = () => {
           <View className='link fix-foot' onClick={handleDIY}>定制我的随机池</View>
         </View>
       </View>
-    </View> : null}
+    </> : null}
   </View>
 }
 
