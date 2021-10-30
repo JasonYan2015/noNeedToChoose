@@ -178,7 +178,7 @@ const FC = () => {
       </View>
       <View className='footer'>
         <View className='btn-group'>
-          <Button className={`button stop`} onClick={!loading ? handleClick : handleStop}> 👨‍🍳 推荐一个吧 </Button>
+          <Button className="primary-btn" onClick={!loading ? handleClick : handleStop}> 👨‍🍳 推荐一个吧 </Button>
         </View>
       </View>
     </View> : null}

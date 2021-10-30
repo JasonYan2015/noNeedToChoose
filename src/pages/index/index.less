@@ -1,11 +1,13 @@
+@import "../../app";
+
 .container {
   position: relative;
   display: flex;
   height: 100%;
   justify-content: center;
   flex-direction: column;
-  background-color: #FFC701;
-  color: #fff;
+  background-color: @fifth;
+  color: @primary;
 
   .background {
     @space: -24%;
@@ -37,13 +39,13 @@
     display: flex;
     flex-direction: column;
     font-size: 36px;
-    // color: rgb(104, 55, 0);
-    // text-shadow: 0 0 10px #eee;
+    color: @primary;
 
     .body {
       align-items: flex-start;
     }
     .greeting {
+      opacity: .7;
       text-align: left;
       margin-top: 24px;
       padding: 0 120px;
@@ -54,7 +56,8 @@
       margin-top: 56px;
 
       .bold {
-        // color: rgb(53, 28, 0);
+        opacity: 1;
+        color: @primary;
         font-size: 48px;
         font-weight: 600;
       }
@@ -74,16 +77,15 @@
 
     .content {
       font-size: 56px;
-      text-shadow: 0 0 10px #666;
 
       &.loading {
-        color: rgba(255, 255, 255, .5);
-        text-shadow: none;
+        color: @primary;
+        opacity: .5;
       }
     }
     .description {
-      color: #fff;
-      text-shadow: 0 0 10px #aaa;
+      color: @primary;
+      opacity: .7;
     }
   }
 
@@ -101,33 +103,28 @@
       justify-content: space-between;
 
       .button {
-        transition: border .2s, color .2s;
         background-color: rgba(200, 200, 200, .1);
         color: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(255,255,255, 1);
         width: 75%;
         padding: 3px 0;
 
         &:active {
           background-color: rgba(255,255,255,.0);
-          color: #fff;
+          color: @second;
         }
 
         &.stop {
-          background-color: #E93B3D;
+          background-color: @primary;
           border: none;
-          box-shadow: 0 0 4px 4px rgba(200, 200, 200, .5);
         }
-        // &.start {
-        //   background-color: #6190E8;
-        //       border: none;
-        //       box-shadow: 0 0 4px 4px rgba(200, 200, 200, .5);
-        // }
+        &.start {
+          .opacity-btn();
+        }
 
         &.primary {
           margin-bottom: 30px;
 
-          background-color: #E93B3D;
+          background-color: @primary;
           border: none;
           box-shadow: 0 0 4px 4px rgba(200, 200, 200, .5);
         }
