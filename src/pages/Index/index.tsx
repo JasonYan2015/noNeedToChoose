@@ -10,7 +10,7 @@ import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg
 import './index.less'
 
 const getRandomIndex = (length) => Math.floor(Math.random() * length)
-const splitArrayIntoTwo: <T>(arr: T[], size: number) => T[][] = (arr, size) => {
+const splitArrayIntoTwo: <T>(arr: T[], size: number) => [T[], T[]] = (arr, size) => {
   const res = []
   const remaining = arr.slice()
 
