@@ -1,4 +1,4 @@
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { useDidShow, reportAnalytics } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -139,6 +139,11 @@ const FC = () => {
     setClock(undefined)
     setLoading(false)
     setBgRandomIndex(-1)
+
+    reportAnalytics('random_result', {
+      result_name: food?.name,
+      result_count: count,
+    });
   }, [setClock, clock])
 
   /**

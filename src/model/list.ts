@@ -1,5 +1,5 @@
-import { getStorageSync, setStorageSync } from "@tarojs/taro";
-import { useState } from "react";
+import { getStorageSync, reportAnalytics, setStorageSync } from "@tarojs/taro";
+import { useCallback, useEffect, useState } from "react";
 import { RANDOM_LIST } from "../constants"
 import { FOOD_LIST } from "../constants/food"
 
@@ -14,6 +14,7 @@ export function getList() {
     // setStorageSync(RANDOM_LIST, foodList)
     console.error('❌ || getList error', error);
   }
+  console.log('🚧 || getList', _list);
 
   if (!_list || !Array.isArray(_list)) {
     resetList()
@@ -33,24 +34,32 @@ export function resetList() {
 }
 
 export const useRandomList = () => {
+  const [randomList, setRandomList] = useState<{name: string, description: string}[]>([])
+  useEffect(() => {
     const initList = getList()
-  const [randomList, setRandomList] = useState<{name: string, description: string}[]>(initList)
+    setRandomList(initList)
 
-  const updateRandomList = (list) => {
+    reportAnalytics('currrent_random_pool', {
+      random_list: initList.map(item => item.name).join(','),
+    });
+  }, [])
+
+  const updateRandomList = useCallback((list) => {
+    console.log('🚧 || updateRandomList', updateRandomList);
     setList(list)
     setRandomList(list)
-  }
+  }, [setRandomList])
 
-  const refreshRandomList = () => {
+  const refreshRandomList = useCallback(() => {
     const list = getList()
     setList(list)
     setRandomList(list)
-  }
+  }, [setRandomList])
 
-  const resetRandomList = () => {
+  const resetRandomList = useCallback(() => {
     resetList()
     refreshRandomList()
-  }
+  }, [refreshRandomList])
 
   return {
     randomList,
