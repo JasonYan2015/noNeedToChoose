@@ -27,11 +27,6 @@ const FC: React.FC = () => {
     setRandomList(newList)
   }
 
-  console.log('🚧 || activeIndex', activeIndex);
-  useEffect(() => {
-    console.log('🚧 || effect activeIndex', activeIndex);
-  }, [activeIndex])
-
   const handleClickOutSide = () => {
     setActiveIndex(false)
   }

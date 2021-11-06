@@ -14,7 +14,6 @@ export function getList() {
     // setStorageSync(RANDOM_LIST, foodList)
     console.error('❌ || getList error', error);
   }
-  console.log('🚧 || getList', _list);
 
   if (!_list || !Array.isArray(_list)) {
     resetList()
@@ -45,7 +44,6 @@ export const useRandomList = () => {
   }, [])
 
   const updateRandomList = useCallback((list) => {
-    console.log('🚧 || updateRandomList', updateRandomList);
     setList(list)
     setRandomList(list)
   }, [setRandomList])
