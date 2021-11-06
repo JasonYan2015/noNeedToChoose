@@ -47,14 +47,10 @@ const FC = () => {
    * 刚打开的指引
    */
   const [needWelcome, setNeedWelcome] = useState(true)
-
   /**
-   * 分享
+   * 摇的次数
    */
-  useShare({
-    title: '今天吃什么？',
-    path: 'pages/index/index'
-  })
+  const [count, setCount] = useState(1)
 
   /**
    * 初始化食物列表
@@ -81,6 +77,14 @@ const FC = () => {
   }, [food])
 
   /**
+   * 分享
+   */
+   useShare({
+    title: needWelcome || !food?.name ? '今天吃什么？' : `今天吃${food?.name}？`,
+    path: 'pages/Index/index',
+  })
+
+  /**
    * 摇
    */
   const reRandom = useCallback((tk, setTk) => {
@@ -92,7 +96,6 @@ const FC = () => {
       setTk(0)
     }
     const newBgIndex = Math.floor(steps)
-    console.log('🚧 || newBgIndex', newBgIndex);
     setBgRandomIndex(newBgIndex)
   }, [setFood, getFoodRandom])
 
@@ -106,7 +109,6 @@ const FC = () => {
     const setTk = (t) => tk = t
     setClock(setInterval(() => {
       tk++;
-      console.log('🚧 || tk', tk);
       reRandom(tk, setTk)
     }, 66))
     return () => clearInterval(clock)
@@ -117,9 +119,13 @@ const FC = () => {
    * 点击事件
    */
   const handleClick = useCallback(() => {
+    // 计数+1
+    setCount(count + 1)
     // 不用欢迎了
     if (needWelcome) setNeedWelcome(false)
+    // 已经进行中，拦截（理论上不应该执行）
     if (clock) return
+
     setLoading(true)
     startInterval()
   }, [clock, startInterval])
@@ -128,6 +134,7 @@ const FC = () => {
    * “就它了”
    */
   const handleStop = useCallback(() => {
+    console.log('🚧 || count', count);
     clearInterval(clock)
     setClock(undefined)
     setLoading(false)
@@ -139,7 +146,7 @@ const FC = () => {
    */
   const handleDIY = () => {
     Taro.navigateTo({
-      url: '/pages/new/index'
+      url: '/pages/New/index'
     })
   }
 
@@ -208,6 +215,7 @@ const FC = () => {
     </View> : null}
 
     {!needWelcome ? <>
+
       {/* 结果和描述 */}
       <View className='body'>
         <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>
