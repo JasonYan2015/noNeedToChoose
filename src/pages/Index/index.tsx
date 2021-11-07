@@ -1,10 +1,11 @@
-import Taro, { useDidShow, reportAnalytics } from '@tarojs/taro'
+import Taro, { useDidShow, reportAnalytics, showActionSheet } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
 import { useShare } from '@/utils/share'
+import elipsisImage from '@/assets/elipsis.png'
 
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '@/assets/foodIcon'
 import './index.less'
@@ -18,6 +19,7 @@ const splitArrayIntoTwo: <T>(arr: T[], size: number) => [T[], T[]] = (arr, size)
     const randomIndex = getRandomIndex(remaining.length)
     const movingItem = remaining[randomIndex]
     remaining.splice(randomIndex, 1)
+    // @ts-ignore-next-line
     res.push(movingItem)
   }
 
@@ -42,22 +44,40 @@ const getRandom = (list) => {
 }
 const getDescriptionRandom = () => getRandom(COMMON_DESCRIPTION)
 
+const useClock = () => {
+  const [clock, setClock] = useState<any>()
+  const clearClock = useCallback(() => {
+    clearInterval(clock)
+    setClock(undefined)
+  }, [clock, setClock])
+  return {
+    clock,
+    setClock,
+    clearClock
+  }
+}
+
 const FC = () => {
   /**
    * 刚打开的指引
    */
-  const [needWelcome, setNeedWelcome] = useState(true)
+  const [needWelcome, setNeedWelcome] = useState(false)
   /**
    * 摇的次数
    */
   const [count, setCount] = useState(1)
+  /**
+   * 时钟
+   */
+  const {clock, setClock, clearClock} = useClock()
 
   /**
    * 初始化食物列表
    */
-  const {randomList, refreshRandomList} = useRandomList()
+  const {randomList, refreshRandomList, setRandomList} = useRandomList()
   const getFoodRandom = useCallback(() => getRandom(randomList), [randomList])
   useDidShow(() => {
+    console.log('~~~~~~~~~~~~~~~~~~~~~~ refresh');
     refreshRandomList()
   })
 
@@ -103,7 +123,6 @@ const FC = () => {
    * 摇 时钟
    * 66ms
    */
-  const [clock, setClock] = useState<any>()
   const startInterval = useCallback(() => {
     let tk = 0
     const setTk = (t) => tk = t
@@ -111,32 +130,33 @@ const FC = () => {
       tk++;
       reRandom(tk, setTk)
     }, 66))
-    return () => clearInterval(clock)
-  }, [clock, reRandom])
+    return clearClock
+  }, [setClock, clearClock, reRandom])
 
   /**
    * 开始摇
    * 点击事件
    */
-  const handleClick = useCallback(() => {
+  const handleStartRandom = useCallback(() => {
     // 计数+1
     setCount(count + 1)
     // 不用欢迎了
     if (needWelcome) setNeedWelcome(false)
     // 已经进行中，拦截（理论上不应该执行）
-    if (clock) return
+    if (clock) {
+      return
+    }
 
     setLoading(true)
     startInterval()
-  }, [clock, startInterval])
+  }, [clock, startInterval, count, needWelcome])
 
   /**
    * “就它了”
    */
   const handleStop = useCallback(() => {
-    console.log('🚧 || count', count);
-    clearInterval(clock)
-    setClock(undefined)
+    clearClock()
+
     setLoading(false)
     setBgRandomIndex(-1)
 
@@ -144,12 +164,13 @@ const FC = () => {
       result_name: food?.name,
       result_count: count,
     });
-  }, [setClock, clock])
+  }, [clearClock, food, count])
 
   /**
    * 自定义随机池
    */
   const handleDIY = () => {
+    handleStop()
     Taro.navigateTo({
       url: '/pages/New/index'
     })
@@ -179,6 +200,36 @@ const FC = () => {
     setBgLeftList(left)
     setBgRightList(right)
   }, [])
+
+  /**
+   * 更多按钮
+   */
+  const handleMore = () => {
+    showActionSheet({
+      itemList: ['👎 不再出现这个食物', '📝 定制我的备选池'],
+      success: (res) => {
+        switch(res.tapIndex) {
+          case 0: {
+            // 从池子里去掉这个食物
+            const indexInRandomList = randomList.findIndex(item => item?.name === food?.name)
+            const newList = randomList.slice()
+            newList.splice(indexInRandomList, 1)
+            setRandomList(newList)
+
+            handleStartRandom()
+            break
+          }
+          case 1: {
+            handleDIY()
+            break
+          }
+        }
+      },
+      fail: (res) => {
+        console.log(res.errMsg)
+      }
+    })
+  }
 
   return <View className='container'>
 
@@ -214,7 +265,7 @@ const FC = () => {
       </View>
       <View className='footer'>
         <View className='btn-group'>
-          <Button className="primary-btn" onClick={!loading ? handleClick : handleStop}> 👨‍🍳 推荐一个吧 </Button>
+          <Button className="primary-btn" onClick={!loading ? handleStartRandom : handleStop}> 👨‍🍳 推荐一个吧 </Button>
         </View>
       </View>
     </View> : null}
@@ -223,7 +274,9 @@ const FC = () => {
 
       {/* 结果和描述 */}
       <View className='body'>
-        <View className={`content ${loading ? 'loading' : null}`}>{food?.name || '🤯 没啥好吃了'}</View>
+        <View className={`content ${loading ? 'loading' : null}`}>
+          {food?.name || '🤯 没啥好吃了'}
+        </View>
         {!loading ? <View className='description'>{food?.description || description}</View> : null}
       </View>
 
@@ -231,14 +284,16 @@ const FC = () => {
       <View className='footer'>
         <View className='btn-group'>
           {!loading ? <Button className='button primary' onClick={goOrder}>🍻 优惠点餐</Button> : null}
-          <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleClick : handleStop}>
+          <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
             {!loading ? '🤔 换一个' : '🤟 就它了'}
           </Button>
           {/* {!loading
             ? <Button className='button' onClick={handleClick}>🤔 换一个</Button>
             : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
           } */}
-          <View className='link fix-foot' onClick={handleDIY}>定制我的随机池</View>
+          {!loading ? <View className='link fix-foot' onClick={handleMore}>
+            <Image style={{width: 40, height: 40}} mode="aspectFit" src={elipsisImage}></Image>
+          </View> : null}
         </View>
       </View>
     </> : null}
