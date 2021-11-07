@@ -61,7 +61,7 @@ const FC = () => {
   /**
    * 刚打开的指引
    */
-  const [needWelcome, setNeedWelcome] = useState(false)
+  const [needWelcome, setNeedWelcome] = useState(true)
   /**
    * 摇的次数
    */
