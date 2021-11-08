@@ -292,7 +292,8 @@ const FC = () => {
             : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
           } */}
           {!loading ? <View className='link fix-foot' onClick={handleMore}>
-            <Image style={{width: 40, height: 40}} mode="aspectFit" src={elipsisImage}></Image>
+            {/* <Image style={{width: 40, height: 40}} mode="aspectFit" src={elipsisImage}></Image> */}
+            查看更多
           </View> : null}
         </View>
       </View>
