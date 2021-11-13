@@ -1,3 +1,4 @@
+import { initRandomNumber } from "@/utils/random";
 import { getStorageSync, reportAnalytics, setStorageSync } from "@tarojs/taro";
 import { useCallback, useEffect, useState } from "react";
 import { RANDOM_LIST } from "../constants"
@@ -7,7 +8,8 @@ let _list: {
   name: string;
   description: string;
 }[] = []
-export function getList() {
+// 原始列表
+function getOriginList() {
   try {
     _list = getStorageSync(RANDOM_LIST)
   } catch (error) {
@@ -32,8 +34,22 @@ export function resetList() {
   _list = FOOD_LIST
 }
 
+/**
+ * 获取加工后的列表
+ * 1. 加上一个以日期为种子的随机数
+ */
+function getList() {
+  const originList = getOriginList()
+  return originList.map((item, index) => {
+    return {
+      ...item,
+      randomNumber: initRandomNumber(index)
+    }
+  })
+}
+
 export const useRandomList = () => {
-  const [randomList, setRandomList] = useState<{name: string, description: string}[]>([])
+  const [randomList, setRandomList] = useState<{name: string, description: string, randomNumber: number}[]>([])
   useEffect(() => {
     const initList = getList()
     setRandomList(initList)

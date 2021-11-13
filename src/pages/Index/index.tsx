@@ -38,8 +38,8 @@ const BG_ICON_LIST = [ bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, 
 const BG_ICON_LIST_SIDE_LENGTH = Math.floor(BG_ICON_LIST.length / 2)
 
 const getRandom = (list) => {
-  const foodLength = list.length
-  const index = Math.floor(Math.random() * foodLength)
+  const length = list.length
+  const index = Math.floor(Math.random() * length)
   return list[index]
 }
 const getDescriptionRandom = () => getRandom(COMMON_DESCRIPTION)
@@ -274,6 +274,7 @@ const FC = () => {
 
       {/* 结果和描述 */}
       <View className='body'>
+        {!loading && food?.randomNumber &&<View className="description" style={{marginBottom: 40}}>今天{food.randomNumber}人选择类似结果</View>}
         <View className={`content ${loading ? 'loading' : null}`}>
           {food?.name || '🤯 没啥好吃了'}
         </View>
@@ -283,19 +284,11 @@ const FC = () => {
       {/* 底部操作区 */}
       <View className='footer'>
         <View className='btn-group'>
-          {/* {!loading ? <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button> : null} */}
-          {!loading ? <Button className='button primary' onClick={goOrder}>🍻 去美团领取专属红包</Button> : null}
+          {!loading ? <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button> : null}
           <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
             {!loading ? '🤔 换一个' : '🤟 就它了'}
           </Button>
-          {/* {!loading
-            ? <Button className='button' onClick={handleClick}>🤔 换一个</Button>
-            : <Button className='button' onClick={handleStop}>🤟 就它了</Button>
-          } */}
-          {!loading ? <View className='link fix-foot' onClick={handleMore}>
-            {/* <Image style={{width: 40, height: 40}} mode="aspectFit" src={elipsisImage}></Image> */}
-            查看更多
-          </View> : null}
+          {!loading ? <View className='link fix-foot' onClick={handleMore}>查看更多</View> : null}
         </View>
       </View>
     </> : null}
