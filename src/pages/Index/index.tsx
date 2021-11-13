@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
 import { useShare } from '@/utils/share'
-import elipsisImage from '@/assets/elipsis.png'
+// import elipsisImage from '@/assets/elipsis.png'
 
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '@/assets/foodIcon'
 import './index.less'
@@ -100,7 +100,7 @@ const FC = () => {
    * 分享
    */
    useShare({
-    title: needWelcome || !food?.name ? '今天吃什么？' : `今天吃${food?.name}？`,
+    title: needWelcome || !food?.name ? '今天吃什么？👨‍🍳我帮你决定，还可以领红包哦' : `吃${food?.name}吧🥳你的红包已经准备好啦`,
     path: 'pages/Index/index',
   })
 
@@ -283,7 +283,8 @@ const FC = () => {
       {/* 底部操作区 */}
       <View className='footer'>
         <View className='btn-group'>
-          {!loading ? <Button className='button primary' onClick={goOrder}>🍻 优惠点餐</Button> : null}
+          {/* {!loading ? <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button> : null} */}
+          {!loading ? <Button className='button primary' onClick={goOrder}>🍻 去美团领取专属红包</Button> : null}
           <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
             {!loading ? '🤔 换一个' : '🤟 就它了'}
           </Button>
