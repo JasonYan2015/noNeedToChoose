@@ -41,9 +41,10 @@ export function resetList() {
 function getList() {
   const originList = getOriginList()
   return originList.map((item, index) => {
+    const randomNumber = initRandomNumber(index)
     return {
       ...item,
-      randomNumber: initRandomNumber(index)
+      randomNumber
     }
   })
 }

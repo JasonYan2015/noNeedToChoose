@@ -16,5 +16,5 @@ function rnd( seed ){
 
   const seed = ~~fullDate;
   const res = Math.ceil( rnd(seed) * number * 7 );
-  return (res * 12 + 7) % 198
+  return (res * 7) % 178 + 36
 }
