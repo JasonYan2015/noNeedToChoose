@@ -1,0 +1,27 @@
+.barrage-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 30px 0;
+  overflow: hidden;
+
+  .text {
+    overflow: hidden;
+    position: absolute;
+    top: 150rpx;
+
+    animation: moving 3s linear infinite;
+  }
+
+  @keyframes moving {
+    0% {
+      transform: translateX(750rpx);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}
