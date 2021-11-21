@@ -11,7 +11,7 @@ import { useShare } from '@/utils/share'
 
 import './index.less'
 
-const FC: React.FC = (props) => {
+const FC: React.FC = () => {
   const [text, setText] = useState('')
   const barrageListDB = useRef(DB.collection('barrage_group'))
 
@@ -43,19 +43,26 @@ const FC: React.FC = (props) => {
   }, [])
 
   console.log('🚧 || props', getCurrentInstance().router?.params?.result);
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!text.trim()) return
 
     const result = getCurrentInstance().router?.params?.result || '吃啥呢'
-    barrageListDB.current
-      .add({
-        data: {
-          couldShow: false,
-          content: text,
-          userId: 'unknown',
-          result
-        }
-      })
+    try {
+      await barrageListDB.current
+        .add({
+          data: {
+            couldShow: false,
+            content: text,
+            userId: 'unknown',
+            result
+          }
+        })
+    } catch (error) {
+      return TaroShowToast({title: '提交失败，请重试'})
+    }
+
+    TaroShowToast({title: '提交成功'})
+    setText('')
   }
 
   return <View className="container">
