@@ -39,5 +39,6 @@
         "showES6CompileOption": false
     },
     "compileType": "miniprogram",
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
     "condition": {}
 }

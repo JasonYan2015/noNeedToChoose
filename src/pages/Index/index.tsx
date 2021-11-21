@@ -1,6 +1,6 @@
 import Taro, { useDidShow, reportAnalytics, showActionSheet } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
@@ -8,6 +8,10 @@ import { useShare } from '@/utils/share'
 // import elipsisImage from '@/assets/elipsis.png'
 
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '@/assets/foodIcon'
+// import { useFoodResult } from '@/model/food'
+
+import Barrage from './components/Barrage'
+
 import './index.less'
 
 const getRandomIndex = (length) => Math.floor(Math.random() * length)
@@ -76,6 +80,7 @@ const FC = () => {
    */
   const {randomList, refreshRandomList, setRandomList} = useRandomList()
   const getFoodRandom = useCallback(() => getRandom(randomList), [randomList])
+  // const {food, setFood} = useFoodResult()
   useDidShow(() => {
     console.log('~~~~~~~~~~~~~~~~~~~~~~ refresh');
     refreshRandomList()
@@ -84,7 +89,8 @@ const FC = () => {
   /**
    * 摇一个食物、描述、出现的食物底图
    */
-  const [food, setFood] = useState(getFoodRandom())
+   const [food, setFood] = useState(getFoodRandom())
+  const [barrageList, setBarrageList] = useState(['123', '1123', '123']as string[])
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState(getDescriptionRandom())
   const [bgRandomIndex, setBgRandomIndex] = useState(-1)
@@ -92,9 +98,10 @@ const FC = () => {
     const newFood = getFoodRandom()
     setFood(newFood)
   }, [setFood, getFoodRandom])
-  useEffect(() => {
-    setDescription(getDescriptionRandom())
-  }, [food])
+  // useEffect(() => {
+
+
+  // }, [food])
 
   /**
    * 分享
@@ -159,6 +166,7 @@ const FC = () => {
 
     setLoading(false)
     setBgRandomIndex(-1)
+    setDescription(getDescriptionRandom())
 
     reportAnalytics('random_result', {
       result_name: food?.name,
@@ -191,6 +199,28 @@ const FC = () => {
   }
 
   /**
+   * 跳转弹幕编辑页
+   */
+  const goBarrageInput = () => {
+    handleStop()
+
+    // authorize({
+    //   scope: 'scope.userInfo',
+    //   success: () => {
+        Taro.navigateTo({
+          url: `/pages/Barrage/index?result=${food.name}`
+        })
+      // },
+      // fail: () => {
+      //   showToast({
+      //     title: '好像还没登陆，记得授权登陆哦～',
+      //     icon: 'none',
+      //   })
+      // }
+    // })
+  }
+
+  /**
    * 背景美食列表
    */
   const [bgLeftList, setBgLeftList] = useState([] as any[])
@@ -206,7 +236,7 @@ const FC = () => {
    */
   const handleMore = () => {
     showActionSheet({
-      itemList: ['👎 不再出现这个食物', '📝 定制我的备选池'],
+      itemList: ['👎 不再出现这个食物', '📝 定制我的备选池', '💬 发送弹幕'],
       success: (res) => {
         switch(res.tapIndex) {
           case 0: {
@@ -221,6 +251,10 @@ const FC = () => {
           }
           case 1: {
             handleDIY()
+            break
+          }
+          case 2: {
+            goBarrageInput()
             break
           }
         }
@@ -274,11 +308,17 @@ const FC = () => {
 
       {/* 结果和描述 */}
       <View className='body'>
+        {/* 今天 xx 人选择 */}
         {!loading && food?.randomNumber &&<View className="description" style={{marginBottom: 40}}>今天{food.randomNumber}人选择类似结果</View>}
-        <View className={`content ${loading ? 'loading' : null}`}>
+        {/* 食物内容 */}
+        <View className={`content ${loading ? 'loading' : ''}`}>
           {food?.name || '🤯 没啥好吃了'}
         </View>
+        {/* 食物描述 */}
         {!loading ? <View className='description'>{food?.description || description}</View> : null}
+
+        {/* 弹幕 */}
+        <Barrage textList={barrageList} />
       </View>
 
       {/* 底部操作区 */}

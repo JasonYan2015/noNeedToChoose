@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/Index/index',
     'pages/New/index',
+    'pages/Barrage/index',
   ],
   window: {
     // backgroundTextStyle: 'light',

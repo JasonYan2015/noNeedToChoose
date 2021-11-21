@@ -23,6 +23,12 @@
                     "pathName": "pages/Index/index",
                     "query": "",
                     "scene": null
+                },
+                {
+                    "name": "弹幕页",
+                    "pathName": "pages/Barrage/index",
+                    "query": "",
+                    "scene": null
                 }
             ]
         }

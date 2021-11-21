@@ -3,11 +3,9 @@ import { getStorageSync, reportAnalytics, setStorageSync } from "@tarojs/taro";
 import { useCallback, useEffect, useState } from "react";
 import { RANDOM_LIST } from "../constants"
 import { FOOD_LIST } from "../constants/food"
+import type { Food } from "./food";
 
-let _list: {
-  name: string;
-  description: string;
-}[] = []
+let _list: Food[] = []
 // 原始列表
 function getOriginList() {
   try {
