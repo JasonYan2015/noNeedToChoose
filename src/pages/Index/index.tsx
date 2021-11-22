@@ -1,4 +1,4 @@
-import Taro, { useDidShow, reportAnalytics, showActionSheet } from '@tarojs/taro'
+import Taro, { useDidShow, reportAnalytics, showActionSheet, showModal } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
 import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -41,6 +41,8 @@ const getGreetings = () => {
 const BG_ICON_LIST = [ bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 ]
 const BG_ICON_LIST_SIDE_LENGTH = Math.floor(BG_ICON_LIST.length / 2)
 
+const BG_RANDOM_STEP_LENGTH = 4
+
 const getRandom = (list) => {
   const length = list.length
   const index = Math.floor(Math.random() * length)
@@ -65,7 +67,7 @@ const FC = () => {
   /**
    * 刚打开的指引
    */
-  const [needWelcome, setNeedWelcome] = useState(true)
+  const [needWelcome, setNeedWelcome] = useState(false)
   /**
    * 摇的次数
    */
@@ -113,29 +115,27 @@ const FC = () => {
   /**
    * 摇
    */
-  const reRandom = useCallback((tk, setTk) => {
+  const reRandom = useCallback((tk) => {
     const newRandom = getFoodRandom()
     setFood(newRandom)
 
-    const steps = tk / 5
-    if (steps > BG_ICON_LIST.length) {
-      setTk(0)
-    }
+    // 这个除法是取步长，因为每一次random都会执行一次当前函数
+    const steps = tk / BG_RANDOM_STEP_LENGTH
     const newBgIndex = Math.floor(steps)
-    setBgRandomIndex(newBgIndex)
+    // 取余，这样进位后就可以从头开始
+    setBgRandomIndex(newBgIndex % BG_ICON_LIST.length)
   }, [setFood, getFoodRandom])
 
   /**
    * 摇 时钟
    * 66ms
    */
-  const startInterval = useCallback(() => {
-    let tk = 0
-    const setTk = (t) => tk = t
+  const startInterval = useCallback((startIndex = 0) => {
+    let tk = 0 * BG_RANDOM_STEP_LENGTH
     setClock(setInterval(() => {
-      tk++;
-      reRandom(tk, setTk)
-    }, 66))
+      tk++
+      reRandom(tk)
+    }, 1000 / 12))
     return clearClock
   }, [setClock, clearClock, reRandom])
 
@@ -154,7 +154,8 @@ const FC = () => {
     }
 
     setLoading(true)
-    startInterval()
+    const randomBgStartIndex = ~~(Math.random() * BG_ICON_LIST.length)
+    startInterval(randomBgStartIndex)
   }, [clock, startInterval, count, needWelcome])
 
   /**
@@ -231,6 +232,25 @@ const FC = () => {
   }, [])
 
   /**
+   * 从池子里去掉这个食物
+   */
+  const handleDislike = () => {
+    showModal({
+      title: '提示',
+      content: '真的要从备选池中删除这个食物吗？',
+      success: res => {
+        if (res.confirm) {
+          const indexInRandomList = randomList.findIndex(item => item?.name === food?.name)
+          const newList = randomList.slice()
+          newList.splice(indexInRandomList, 1)
+          setRandomList(newList)
+
+          handleStartRandom()
+        }
+      }
+    })
+  }
+  /**
    * 更多按钮
    */
   const handleMore = () => {
@@ -239,13 +259,7 @@ const FC = () => {
       success: (res) => {
         switch(res.tapIndex) {
           case 0: {
-            // 从池子里去掉这个食物
-            const indexInRandomList = randomList.findIndex(item => item?.name === food?.name)
-            const newList = randomList.slice()
-            newList.splice(indexInRandomList, 1)
-            setRandomList(newList)
-
-            handleStartRandom()
+            handleDislike()
             break
           }
           case 1: {
@@ -324,9 +338,12 @@ const FC = () => {
       <View className='footer'>
         <View className='btn-group'>
           {!loading ? <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button> : null}
-          <Button className={`button ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
-            {!loading ? '🤔 换一个' : '🤟 就它了'}
-          </Button>
+          <View className="btn-row">
+            {!loading && <Button className="button sub" onClick={handleDislike}>👎</Button>}
+            <Button className={`button main ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
+              {!loading ? '🤔 换一个' : '🤟 就它了'}
+            </Button>
+          </View>
           {!loading ? <View className='link fix-foot' onClick={handleMore}>查看更多</View> : null}
         </View>
       </View>
