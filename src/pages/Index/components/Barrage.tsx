@@ -6,10 +6,7 @@ import { DB } from '@/db';
 
 import './barrage.less';
 
-const FC: React.FC<{
-  textList: string[]
-}> = ({textList}) => {
-  // if (!Array.isArray(textList) || !textList?.length) return null
+const FC: React.FC = () => {
   const barrageListDB = useRef(DB.collection('barrage_group'))
   const [list, setList] = useState([] as string[])
 
@@ -34,7 +31,7 @@ const FC: React.FC<{
     // })
   }, [])
 
-  const renderList = (list || textList).map((item, index) => {
+  const renderList = (list).map((item, index) => {
     const randomNumber = initRandomNumber(index)
     const randomIndex = ~~(Math.random() * 1000 * 3)
 
@@ -45,6 +42,10 @@ const FC: React.FC<{
     }
   })
 
+  if (!renderList.length) {
+    return null
+  }
+
   return <View className="barrage-container">
     {renderList.map((item, index) => {
       return <View
@@ -52,7 +53,8 @@ const FC: React.FC<{
         className="text"
         style={{
           top: item.top,
-          animationDelay: item.index
+          animationDelay: item.index,
+          zIndex: index
         }}
       >{item.text}</View>
     })}

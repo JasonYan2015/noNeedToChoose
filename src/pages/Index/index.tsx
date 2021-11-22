@@ -89,8 +89,8 @@ const FC = () => {
   /**
    * 摇一个食物、描述、出现的食物底图
    */
-   const [food, setFood] = useState(getFoodRandom())
-  const [barrageList, setBarrageList] = useState(['123', '1123', '123']as string[])
+  const [food, setFood] = useState(getFoodRandom())
+  const [barrageList] = useState([]as string[])
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState(getDescriptionRandom())
   const [bgRandomIndex, setBgRandomIndex] = useState(-1)
