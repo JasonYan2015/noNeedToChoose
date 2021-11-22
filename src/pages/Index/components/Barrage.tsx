@@ -33,7 +33,7 @@ const FC: React.FC = () => {
 
   const renderList = (list).map((item, index) => {
     const randomNumber = initRandomNumber(index)
-    const randomIndex = ~~(Math.random() * 1000 * 3)
+    const randomIndex = ~~(Math.random() * 1000 * 5)
 
     return {
       text: item,
@@ -54,7 +54,7 @@ const FC: React.FC = () => {
         style={{
           top: item.top,
           animationDelay: item.index,
-          zIndex: index
+          zIndex: index,
         }}
       >{item.text}</View>
     })}
