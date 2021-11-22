@@ -1,6 +1,6 @@
 import Taro, { useDidShow, reportAnalytics, showActionSheet } from '@tarojs/taro'
 import { View, Button, Image, Text } from '@tarojs/components'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
@@ -90,7 +90,6 @@ const FC = () => {
    * 摇一个食物、描述、出现的食物底图
    */
   const [food, setFood] = useState(getFoodRandom())
-  const [barrageList] = useState([]as string[])
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState(getDescriptionRandom())
   const [bgRandomIndex, setBgRandomIndex] = useState(-1)
@@ -318,7 +317,7 @@ const FC = () => {
         {!loading ? <View className='description'>{food?.description || description}</View> : null}
 
         {/* 弹幕 */}
-        <Barrage textList={barrageList} />
+        <Barrage />
       </View>
 
       {/* 底部操作区 */}
