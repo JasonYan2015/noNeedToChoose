@@ -6,6 +6,7 @@ import {COMMON_DESCRIPTION, SENTENCE_LIST} from '@/constants/food'
 import { useRandomList } from '@/model/list'
 import { useShare } from '@/utils/share'
 // import elipsisImage from '@/assets/elipsis.png'
+import deleteImg from '@/assets/delete.png'
 
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13, bg14, bg15, bg16, bg17, bg18, bg19 } from '@/assets/foodIcon'
 // import { useFoodResult } from '@/model/food'
@@ -237,7 +238,7 @@ const FC = () => {
   const handleDislike = () => {
     showModal({
       title: '提示',
-      content: '真的要从备选池中删除这个食物吗？',
+      content: '真的要从备选池中删除这个食物吗？它将不会出现在结果中',
       success: res => {
         if (res.confirm) {
           const indexInRandomList = randomList.findIndex(item => item?.name === food?.name)
@@ -245,7 +246,19 @@ const FC = () => {
           newList.splice(indexInRandomList, 1)
           setRandomList(newList)
 
-          handleStartRandom()
+          // 删到不到6个的时候给个提示，要不要去加点
+          if (newList.length < 6) {
+            showModal({
+              title: '提示',
+              content: `备选池中仅剩 ${newList.length} 个选项，建议去添加一些爱吃的呢`,
+              confirmText: '去添加',
+              cancelText: '不用了',
+              success: r => {
+                if (r.confirm) handleDIY()
+                else handleStartRandom()
+              }
+            })
+          }
         }
       }
     })
@@ -255,18 +268,18 @@ const FC = () => {
    */
   const handleMore = () => {
     showActionSheet({
-      itemList: ['👎 不再出现这个食物', '📝 定制我的备选池', '💬 发送弹幕'],
+      itemList: ['📝 定制我的备选池', '💬 发送弹幕'],
       success: (res) => {
         switch(res.tapIndex) {
+          // case 0: {
+          //   handleDislike()
+          //   break
+          // }
           case 0: {
-            handleDislike()
-            break
-          }
-          case 1: {
             handleDIY()
             break
           }
-          case 2: {
+          case 1: {
             goBarrageInput()
             break
           }
@@ -336,17 +349,26 @@ const FC = () => {
 
       {/* 底部操作区 */}
       <View className='footer'>
-        <View className='btn-group'>
-          {!loading ? <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button> : null}
-          <View className="btn-row">
-            {!loading && <Button className="button sub" onClick={handleDislike}>👎</Button>}
-            <Button className={`button main ${!loading ? 'start' : 'stop'}`} onClick={!loading ? handleStartRandom : handleStop}>
-              {!loading ? '🤔 换一个' : '🤟 就它了'}
-            </Button>
-          </View>
-          {!loading ? <View className='link fix-foot' onClick={handleMore}>查看更多</View> : null}
-        </View>
+        {
+          loading
+            ? <View className='btn-group'>
+                <Button className='button main stop'
+                  onClick={handleStop}
+                >🤟 就它了</Button>
+              </View>
+            : <View className='btn-group'>
+                <Button className='button primary' openType="share" onClick={goOrder}>🍻 分享并领取专属红包</Button>
+                <View className="btn-row">
+                  <View className="button sub" onClick={handleDislike}>
+                    <Image mode='aspectFit' style={{width: 22, height: 22}} src={deleteImg} />
+                  </View>
+                  <Button className='button main start' onClick={handleStartRandom}>换一个</Button>
+                </View>
+                <View className='link fix-foot' onClick={handleMore}>查看更多</View>
+            </View>
+        }
       </View>
+
     </> : null}
   </View>
 }

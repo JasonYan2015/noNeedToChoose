@@ -119,55 +119,58 @@
   .footer {
     flex-basis: 25%;
     position: relative;
+    display: flex;
+    flex-direction: column;
 
   padding-bottom: constant(safe-area-inset-bottom); //兼容IOS < 11.2
   padding-bottom: env(safe-area-inset-bottom);//兼容IOS > 11.2
 
     .btn-group {
+      flex: 1;
+      flex-shrink: 0;
       display: flex;
-      align-items: center;
       flex-direction: column;
+      align-items: center;
+      padding: 0 12.5%;
+      box-sizing: border-box;
       // justify-content: space-between;
 
       .btn-row {
-        width: 75%;
+        width: 100%;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
         justify-content: space-between;
 
         .sub {
-          // flex-basis: 15%;
+          flex-basis: 15%;
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 94px;
-          height: 94px;
+
           border-radius: 50%;
           .opacity-btn();
-          &::after {
-            display: none;
-          }
-          box-shadow: 0 0 1px 1px #e3d7c0;
-          border: 1rpx solid #d7ccb6;
+          // box-shadow: 0 0 1px 1px #e3d7c0;
+          border: 0.5rpx solid #d7ccb6;
           margin-right: 30px;
 
           // box-shadow: 0 0 2px 4px rgba(250, 128, 114, .5);
           // background-color: rgba(250, 128, 114, .2);
+          &::after {
+            content: '';
+            display: block;
+            margin-top: 98%;
+          }
         }
         .main {
           flex: 1;
-        }
-        .button {
           margin: 0;
         }
       }
 
       .button {
-        // background-color: rgba(200, 200, 200, .1);
         color: rgba(255, 255, 255, 1);
-        width: 75%;
-        // height: 96px;
+        width: 100%;
         padding: 3px 0;
 
         &:active {
@@ -181,6 +184,10 @@
         }
         &.start {
           .opacity-btn();
+          &::active {
+            background-color: rgba(255,255,255,.0);
+            color: @second;
+          }
         }
 
         &.primary {
