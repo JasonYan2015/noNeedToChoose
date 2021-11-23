@@ -184,9 +184,9 @@
         }
         &.start {
           .opacity-btn();
-          &::active {
+          &:active {
             background-color: rgba(255,255,255,.0);
-            color: @second;
+            color: @primary;
           }
         }
 
@@ -201,6 +201,10 @@
       }
       .link {
         padding: 0 60px;
+        transition: opacity .3s;
+        &:active {
+          opacity: .7;
+        }
       }
       .fix-foot {
         position: absolute;

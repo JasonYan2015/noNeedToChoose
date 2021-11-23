@@ -68,7 +68,7 @@ const FC = () => {
   /**
    * 刚打开的指引
    */
-  const [needWelcome, setNeedWelcome] = useState(false)
+  const [needWelcome, setNeedWelcome] = useState(true)
   /**
    * 摇的次数
    */
@@ -334,14 +334,19 @@ const FC = () => {
 
       {/* 结果和描述 */}
       <View className='body'>
-        {/* 今天 xx 人选择 */}
-        {!loading && food?.randomNumber &&<View className="description" style={{marginBottom: 40}}>今天{food.randomNumber}人选择类似结果</View>}
-        {/* 食物内容 */}
-        <View className={`content ${loading ? 'loading' : ''}`}>
-          {food?.name || '🤯 没啥好吃了'}
-        </View>
-        {/* 食物描述 */}
-        {!loading ? <View className='description'>{food?.description || description}</View> : null}
+        {
+          loading
+            ? <View className='content loading'>
+              {food?.name || '🤯 没啥好吃了'}
+            </View>
+            : <>
+              {food?.randomNumber &&<View className="description" style={{marginBottom: 40}}>今天{food.randomNumber}人选择类似结果</View>}
+              <View className='content'>
+                {food?.name || '🤯 没啥好吃了'}
+              </View>
+              <View className='description'>{food?.description || description}</View>
+            </>
+        }
 
         {/* 弹幕 */}
         <Barrage />
