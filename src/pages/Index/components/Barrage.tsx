@@ -31,8 +31,9 @@ const FC: React.FC = () => {
     // })
   }, [])
 
-  const renderList = (list).map((item, index) => {
-    const randomNumber = initRandomNumber(index)
+  const baseTopPosition = useRef(initRandomNumber(Math.random()))
+  const renderList = list.map((item, index) => {
+    const randomNumber = baseTopPosition.current + index * 20
     const randomIndex = ~~(Math.random() * 1000 * 5)
 
     return {
