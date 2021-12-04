@@ -1,7 +1,7 @@
 import { cloud } from "@tarojs/taro";
 
 cloud.init({
-  env: 'noneed2choose-0g2mkheh98fc143a'
+  env: 'prod-8gh7tzsa12ad7e1b'
 })
 export const DB = cloud.database()
 
