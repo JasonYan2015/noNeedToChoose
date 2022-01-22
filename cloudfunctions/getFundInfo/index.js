@@ -4,6 +4,9 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
+// TODO: 加一个缓存，判断事件
+const CACHE_DATA = []
+
 // 云函数入口函数
 exports.main = async (event) => {
     try {

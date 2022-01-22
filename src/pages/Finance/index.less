@@ -1,0 +1,37 @@
+@import '../../app.less';
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: @fifth;
+  color: @primary;
+
+  .fund-container {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .left {
+      .title {
+        font-size: 36px;
+        font-weight: bold;
+      }
+    }
+    .right {
+      .percent {
+        font-size: 32px;
+        text-align: right;
+        &.up {
+          color: tomato;
+        }
+        &.down {
+          color: teal;
+        }
+      }
+      .price {
+        text-align: right;
+      }
+    }
+  }
+}
