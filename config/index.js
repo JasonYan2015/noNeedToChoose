@@ -71,6 +71,7 @@ const config = {
     '@/assets': path.resolve(__dirname, '..', 'src/assets'),
     '@/db': path.resolve(__dirname, '..', 'src/db'),
     '@/theme': path.resolve(__dirname, '..', 'src/app.less'),
+    '@/services': path.resolve(__dirname, '..', 'src/services'),
   }
 }
 

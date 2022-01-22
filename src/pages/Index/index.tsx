@@ -291,6 +291,16 @@ const FC = () => {
     })
   }
 
+  /**
+   * 跳转到更多
+   */
+  const handleMoreTools = () => {
+    // 目前只有理财记账
+    Taro.navigateTo({
+      url: '/pages/Finance/index'
+    })
+  }
+
   return <View className='container'>
 
     {/* 背景 */}
@@ -326,6 +336,7 @@ const FC = () => {
       <View className='footer'>
         <View className='btn-group'>
           <Button className="primary-btn" onClick={!loading ? handleStartRandom : handleStop}> 👨‍🍳 推荐一个吧 </Button>
+          <Button className="opacity-btn" onClick={handleMoreTools}> 🤑 其他小工具 </Button>
         </View>
       </View>
     </View> : null}

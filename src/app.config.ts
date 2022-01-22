@@ -3,6 +3,7 @@ export default {
     'pages/Index/index',
     'pages/New/index',
     'pages/Barrage/index',
+    'pages/Finance/index',
   ],
   window: {
     // backgroundTextStyle: 'light',

@@ -29,6 +29,12 @@
                     "pathName": "pages/Barrage/index",
                     "query": "",
                     "scene": null
+                },
+                {
+                    "name": "pages/Finance/index",
+                    "pathName": "pages/Finance/index",
+                    "query": "",
+                    "scene": null
                 }
             ]
         }
