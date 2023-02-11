@@ -418,13 +418,13 @@ const FC = () => {
           <View className="footer">
             <View className="btn-group">
               <Button
-                className="primary-btn"
+                className="primary-btn btn"
                 onClick={!loading ? handleStartRandom : handleStop}
               >
                 👨‍🍳 推荐一个吧
               </Button>
 
-              <Button className="opacity-btn" onClick={handleMoreTools}>
+              <Button className="opacity-btn btn" onClick={handleMoreTools}>
                 🤑 其他小工具
               </Button>
             </View>
