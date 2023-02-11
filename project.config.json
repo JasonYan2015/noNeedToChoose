@@ -40,6 +40,6 @@
     },
     "compileType": "miniprogram",
     "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-    "condition": {},
-    "cloudfunctionRoot": "cloudfunctions/"
+    "cloudfunctionRoot": "cloudfunctions/",
+    "condition": {}
 }
