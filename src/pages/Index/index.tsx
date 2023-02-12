@@ -337,11 +337,9 @@ const FC = () => {
     showActionSheet({
       itemList,
       success: (res) => {
-        switch (res.tapIndex) {
-          // case 0: {
-          //   handleDislike()
-          //   break
-          // }
+        const tapIndex =
+          typeof res.tapIndex === "number" ? res.tapIndex : res.index;
+        switch (tapIndex) {
           case 0: {
             handleDIY();
             break;
@@ -424,9 +422,11 @@ const FC = () => {
                 👨‍🍳 推荐一个吧
               </Button>
 
-              <Button className="opacity-btn btn" onClick={handleMoreTools}>
-                🤑 其他小工具
-              </Button>
+              {false && (
+                <Button className="opacity-btn btn" onClick={handleMoreTools}>
+                  🤑 其他小工具
+                </Button>
+              )}
             </View>
           </View>
         </View>
@@ -444,7 +444,12 @@ const FC = () => {
               <>
                 {food?.randomNumber && (
                   <View className="description" style={{ marginBottom: 40 }}>
-                    今天{food.randomNumber}人选择类似结果
+                    {/* 支付宝里稍微真实一点，除个12 */}
+                    今天
+                    {process.env.TARO_ENV === "alipay"
+                      ? Math.ceil(food.randomNumber / 14)
+                      : food.randomNumber}
+                    人选择类似结果
                   </View>
                 )}
                 <View className="content">{food?.name || "🤯 没啥好吃了"}</View>
@@ -473,7 +478,7 @@ const FC = () => {
                   openType="share"
                   onClick={goOrder}
                 >
-                  🍻 分享并领取专属红包
+                  🍻 分享并领取专属外卖红包
                 </Button>
                 <View className="btn-row">
                   <View className="button sub" onClick={handleDislike}>
