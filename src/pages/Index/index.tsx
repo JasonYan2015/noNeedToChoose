@@ -249,7 +249,7 @@ const FC = () => {
   const goOrder = () => {
     Taro.navigateToMiniProgram({
       appId: "wxde8ac0a21135c07d",
-      path: "/index/pages/h5/h5?lch=cps:waimai:5:0997d7a7f07d93647eaa3d8d92b3a94f:chidianshahaone:33:139764&weburl=https%3A%2F%2Fdpurl.cn%2FUcGpvGQz&f_userId=1&f_token=1",
+      path: "/index/pages/h5/h5?weburl=https%3A%2F%2Fclick.meituan.com%2Ft%3Ft%3D1%26c%3D2%26p%3D1axBzL5zjARn&lch=cps:waimai:5:066669127963045e52737db0a976c1a0:001:344:139764&f_token=1&f_userId=1",
       success: function (res) {
         // 打开成功
         console.log("🚧 || res", res);
